@@ -3,6 +3,15 @@
 Translate every prompt into English for the model, and keep the answer in the
 language you wrote in — one answer, rendered natively.
 
+## Demo
+
+![English Prompt settings panel](docs/panel.png)
+
+The circled-T control sits between the model selector and Send. It is blue while
+prompt translation is on and black while it is off; clicking it opens the
+settings panel above the composer, with the Prompt Translation switch and the
+model and reasoning effort the translation request actually uses.
+
 ## Install
 
 Paste this sentence into any DeepSeek Harness session:
