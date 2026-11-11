@@ -15,26 +15,16 @@ window.__ModuleLoader__.load({
 		const h = React.createElement;
 		const { createPortal } = require('react-dom');
 
-		const NS = 'english-prompt';
 		const API = '/english-prompt/';
 		/** Panel width in CSS pixels, matching the model menu's compact width. */
 		const PANEL_WIDTH = 268;
-
-		const DICTIONARIES = {
-			en: {
-				'button.label': 'English Prompt settings',
-				'panel.promptTranslation': 'Prompt Translation',
-				'panel.model': 'Model',
-				'panel.loading': 'Loading…',
-				'panel.unavailable': 'Unavailable'
-			},
-			zh: {
-				'button.label': '英文提示词设置',
-				'panel.promptTranslation': '提示词翻译',
-				'panel.model': '模型',
-				'panel.loading': '加载中…',
-				'panel.unavailable': '不可用'
-			}
+		/** Fixed English UI text; the plugin never follows the interface language. */
+		const TEXT = {
+			settings: 'English Prompt settings',
+			promptTranslation: 'Prompt Translation',
+			model: 'Model',
+			loading: 'Loading…',
+			unavailable: 'Unavailable'
 		};
 
 		const CSS = [
@@ -59,18 +49,6 @@ window.__ModuleLoader__.load({
 			'.ep-thumb{display:block;width:16px;height:16px;border-radius:50%;background:var(--dsw-alias-switch-thumb);transition:transform .12s}',
 			'.ep-switch[aria-checked="true"] .ep-thumb{background:var(--dsw-alias-label-primary-foreground);transform:translateX(16px)}'
 		].join('');
-
-		/** Resolve one localized string. */
-		function label(t, key) {
-			let text;
-			try {
-				text = typeof t === 'function' ? t(key) : key;
-			} catch {
-				text = key;
-			}
-			if (typeof text !== 'string' || text === '' || text === key) text = DICTIONARIES.en[key] ?? key;
-			return text;
-		}
 
 		/** Read one JSON payload from the Host half. */
 		async function getJson(url) {
@@ -137,7 +115,6 @@ window.__ModuleLoader__.load({
 		 */
 		function ToggleButton(props) {
 			const sessionId = props.sessionId;
-			const t = props.t;
 			const [state, setState] = React.useState({ phase: 'loading' });
 			const [pending, setPending] = React.useState(false);
 			const [open, setOpen] = React.useState(false);
@@ -217,10 +194,10 @@ window.__ModuleLoader__.load({
 			const route = ready ? state.value.route : null;
 			const modelText = route === null || route === undefined
 				? state.phase === 'error'
-					? label(t, 'panel.unavailable')
-					: label(t, 'panel.loading')
+					? TEXT.unavailable
+					: TEXT.loading
 				: [route.name || route.model, route.effort?.name].filter((part) => typeof part === 'string' && part !== '').join(' · ');
-			const triggerLabel = label(t, 'button.label');
+			const triggerLabel = TEXT.settings;
 
 			const panel = open
 				? h(
@@ -235,7 +212,7 @@ window.__ModuleLoader__.load({
 						h(
 							'div',
 							{ className: 'ep-cell ep-cell-action', onClick: toggle },
-							h('span', { className: 'ep-cell-label' }, label(t, 'panel.promptTranslation')),
+							h('span', { className: 'ep-cell-label' }, TEXT.promptTranslation),
 							h('span', { className: 'ep-cell-spacer' }),
 							h(
 								'span',
@@ -244,7 +221,7 @@ window.__ModuleLoader__.load({
 									tabIndex: 0,
 									'aria-checked': enabled,
 									'aria-disabled': pending || !ready,
-									'aria-label': label(t, 'panel.promptTranslation'),
+									'aria-label': TEXT.promptTranslation,
 									className: 'ep-switch',
 									onClick: (event) => {
 										event.stopPropagation();
@@ -263,7 +240,7 @@ window.__ModuleLoader__.load({
 						h(
 							'div',
 							{ className: 'ep-cell' },
-							h('span', { className: 'ep-cell-label' }, label(t, 'panel.model')),
+							h('span', { className: 'ep-cell-label' }, TEXT.model),
 							h('span', { className: 'ep-cell-value', title: modelText }, modelText)
 						)
 					)
@@ -295,7 +272,7 @@ window.__ModuleLoader__.load({
 		}
 
 		return {
-			inject: ['slots', 'locale'],
+			inject: ['slots'],
 			apply(ctx) {
 				ctx.effect(
 					() => {
@@ -310,13 +287,10 @@ window.__ModuleLoader__.load({
 					'english-prompt: styles'
 				);
 
-				ctx.effect(() => ctx.locale.register(NS, DICTIONARIES), 'english-prompt: locale');
-
 				ctx.slots.inject('conversation.input.activity', () =>
 					ctx.slots.register(
 						{
-							name: 'conversation.input.activity',
-							locale: NS
+							name: 'conversation.input.activity'
 						},
 						ToggleButton
 					)

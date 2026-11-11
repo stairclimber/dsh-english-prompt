@@ -46,6 +46,10 @@ sign in to GitHub before cloning.
   not copied from the composer's model selector, so it shows the auxiliary
   request's real effort rather than the Session's.
 
+  The plugin's own UI text — the button's tooltip, the panel rows, and the
+  Plugin Manager title and description — is fixed English and does not follow the
+  interface language.
+
 Only text the plugin itself sends is translated; tool arguments, files, and other
 Session events are never rewritten. Every auxiliary request carries the Session
 identity (routes such as OpenCode require it) and the lowest reasoning effort the
