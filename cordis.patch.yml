@@ -1,0 +1,8 @@
+- insert:
+    - id: english-prompt
+      name: '@local/english-prompt'
+      config:
+        translatePrompts: true
+        answerInUserLanguage: true
+        maxTextChars: 12000
+        timeoutMs: 45000

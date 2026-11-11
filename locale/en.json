@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "English Prompt",
+    "description": "Translates each prompt into English for the model and has the answer written in the language you wrote in, so only one answer ever appears."
+  }
+}
