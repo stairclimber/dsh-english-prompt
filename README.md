@@ -3,6 +3,15 @@
 Translate every prompt into English for the model, and keep the answer in the
 language you wrote in — one answer, rendered natively.
 
+## Install
+
+Paste this sentence into any DeepSeek Harness session:
+
+> Install the DSH plugin from https://github.com/stairclimber/dsh-english-prompt into my current profile: clone the repository, install its package directory as a plugin bundle with the plugin manager, and enable it.
+
+The repository must be reachable by the installing account — make it public or
+sign in to GitHub before cloning.
+
 ## What it does
 
 - **Prompts → English.** Before a prompt enters the model request — and before it
